@@ -1,4 +1,5 @@
 import Vue from 'vue';
+require('babel-polyfill');
 
 Vue.config.productionTip = false;
 
