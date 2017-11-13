@@ -1,55 +1,101 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-      <br>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-    <timer :end="endTime"></timer>
-    <v-btn
-      v-if="!endTime"
-      color="primary"
-      @click.native="onStart">
-      Start
-    </v-btn>
-    <v-btn
-      v-if="endTime"
-      color="error"
-      @click.native="onStop">
-      Stop
-    </v-btn>
+  <div>
+    <div align="center">
+      <timer :end="endTime"></timer>
+      <v-btn v-if="!endTime"
+             color="primary"
+             @click.native="onStart">
+        Start
+      </v-btn>
+      <v-btn v-if="endTime"
+             color="error"
+             @click.native="onStop">
+        Stop
+      </v-btn>
+    </div>
+
+    <div class="codemirror">
+      <codemirror ref='codeEditor'
+                  v-model="code"
+                  :options="editorOptions"></codemirror>
+    </div>
   </div>
 </template>
 
 <script>
+  // require active-line.js
+  require('codemirror/addon/selection/active-line.js');
+  // styleSelectedText
+  require('codemirror/addon/selection/mark-selection.js');
+  require('codemirror/addon/search/searchcursor.js');
+  // hint
+  require('codemirror/addon/hint/show-hint.js');
+  require('codemirror/addon/hint/show-hint.css');
+  require('codemirror/addon/hint/javascript-hint.js');
+  require('codemirror/addon/selection/active-line.js');
+  // highlightSelectionMatches
+  require('codemirror/addon/scroll/annotatescrollbar.js');
+  require('codemirror/addon/search/matchesonscrollbar.js');
+  require('codemirror/addon/search/searchcursor.js');
+  require('codemirror/addon/search/match-highlighter.js');
+  // keyMap
+  require('codemirror/mode/clike/clike.js');
+  require('codemirror/addon/edit/matchbrackets.js');
+  require('codemirror/addon/comment/comment.js');
+  require('codemirror/addon/dialog/dialog.js');
+  require('codemirror/addon/dialog/dialog.css');
+  require('codemirror/addon/search/searchcursor.js');
+  require('codemirror/addon/search/search.js');
+  require('codemirror/keymap/sublime.js');
+  // foldGutter
+  require('codemirror/addon/fold/foldgutter.css');
+  require('codemirror/addon/fold/brace-fold.js');
+  require('codemirror/addon/fold/comment-fold.js');
+  require('codemirror/addon/fold/foldcode.js');
+  require('codemirror/addon/fold/foldgutter.js');
+  require('codemirror/addon/fold/indent-fold.js');
+  require('codemirror/addon/fold/markdown-fold.js');
+  require('codemirror/addon/fold/xml-fold.js');
+
   export default {
-    name: 'HelloWorld',
     data() {
       return {
-        msg: 'Welcome to Your Vue.js App',
-        endTime: undefined
+        endTime: undefined,
+        code: 'const a = 10;',
+        editorOptions: {
+          tabSize: 4,
+          styleActiveLine: true,
+          lineNumbers: true,
+          line: true,
+          foldGutter: true,
+          styleSelectedText: true,
+          gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+          highlightSelectionMatches: {showToken: /\w/, annotateScrollbar: true},
+          mode: 'text/javascript',
+          hintOptions: {
+            completeSingle: false
+          },
+          keyMap: "sublime",
+          matchBrackets: true,
+          showCursorWhenSelecting: true,
+          theme: "monokai",
+          extraKeys: {"Ctrl": "autocomplete"}
+        }
       };
     },
 
-    props: {
+    props: {},
+
+    computed: {
+      editor() {
+        return this.$refs.codeEditor.editor;
+      }
     },
 
     methods: {
       onStart() {
-        if (this.endTime === undefined ) {
-          this.endTime = new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString();
+        if (!this.endTime) {
+          this.endTime = new Date(Date.now() + 4 * 60 * 60 * 1000).toString();
         }
       },
       onStop() {

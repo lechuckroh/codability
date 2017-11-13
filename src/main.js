@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 import '../node_modules/vuetify/dist/vuetify.min.css';
+import VueCodeMirror from 'vue-codemirror';
 import App from './App.vue';
 import Timer from './components/Timer.vue';
 import router from './router';
@@ -10,6 +11,7 @@ import router from './router';
 Vue.config.productionTip = false;
 
 Vue.use(Vuetify);
+Vue.use(VueCodeMirror);
 
 Vue.component('timer', Timer);
 
