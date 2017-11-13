@@ -17,9 +17,19 @@
       <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
     </ul>
-    <timer end="2018-01-01 00:00:00"></timer>
-    <timer end="2017-01-01 00:00:00"></timer>
-    <timer end="foo"></timer>
+    <timer :end="endTime"></timer>
+    <v-btn
+      v-if="!endTime"
+      color="primary"
+      @click.native="onStart">
+      Start
+    </v-btn>
+    <v-btn
+      v-if="endTime"
+      color="error"
+      @click.native="onStop">
+      Stop
+    </v-btn>
   </div>
 </template>
 
@@ -28,8 +38,25 @@
     name: 'HelloWorld',
     data() {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        msg: 'Welcome to Your Vue.js App',
+        endTime: undefined
       };
+    },
+
+    props: {
+    },
+
+    methods: {
+      onStart() {
+        if (this.endTime === undefined ) {
+          this.endTime = new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString();
+        }
+      },
+      onStop() {
+        if (this.endTime) {
+          this.endTime = undefined;
+        }
+      }
     }
   };
 </script>

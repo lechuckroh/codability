@@ -10,18 +10,11 @@
 
   export default {
     mounted() {
-      if (!isNaN(this.endInSec) && nowInSec() <= this.endInSec) {
-        this.intervalId = window.setInterval(() => {
-          this.now = nowInSec();
-        }, 1000);
-      }
+      this.startTimer();
     },
 
     beforeDestroy() {
-      if (this.intervalId) {
-        window.clearInterval(this.intervalId);
-        this.intervalId = undefined;
-      }
+      this.clearTimer();
     },
 
     props: {
@@ -54,13 +47,33 @@
         const hours = padZero(Math.trunc(remainInSec / 3600));
         return `${hours}:${minutes}:${seconds}`;
       }
+    },
+
+    watch: {
+      end() {
+        this.startTimer();
+      }
+    },
+
+    methods: {
+      startTimer() {
+        if (!isNaN(this.endInSec) && nowInSec() <= this.endInSec) {
+          this.intervalId = window.setInterval(() => {
+            this.now = nowInSec();
+          }, 1000);
+        }
+      },
+      clearTimer() {
+        if (this.intervalId) {
+          window.clearInterval(this.intervalId);
+          this.intervalId = undefined;
+        }
+      }
     }
   };
 </script>
 
 <style scoped>
-  @import url(https://fonts.googleapis.com/css?family=Roboto);
-
   .digit {
     color: lightseagreen;
     font-size: 70px;
