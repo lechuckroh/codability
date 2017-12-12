@@ -13,6 +13,7 @@
         Stop
       </v-btn>
     </div>
+    <code-editor></code-editor>
   </div>
 </template>
 
@@ -20,7 +21,7 @@
   export default {
     data() {
       return {
-        endTime: undefined,
+        endTime: undefined
       };
     },
 
