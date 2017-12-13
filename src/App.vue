@@ -33,13 +33,7 @@
     </v-toolbar>
 
     <v-content>
-      <v-container fluid>
-        <v-slide-y-transition mode="out-in">
-          <v-layout column align-center>
-            <router-view></router-view>
-          </v-layout>
-        </v-slide-y-transition>
-      </v-container>
+      <router-view></router-view>
     </v-content>
     <v-footer :fixed="true" app>
       <span>Codability &copy; 2017</span>
